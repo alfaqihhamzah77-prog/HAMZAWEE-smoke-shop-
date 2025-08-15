@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sky Smoke Shop Loyalty</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #111; color: #ffd700; margin: 0; padding: 0; }
+        header { text-align: center; padding: 20px; font-size: 2em; }
+        .container { padding: 20px; max-width: 500px; margin: auto; }
+        .points { font-size: 1.5em; margin: 10px 0; }
+        .btn { display: block; width: 100%; padding: 10px; margin: 10px 0; background-color: #ffd700; color: #111; border: none; cursor: pointer; font-size: 1em; }
+        .btn:hover { background-color: #e5c100; }
+        table { width: 100%; margin-top: 10px; border-collapse: collapse; }
+        table, th, td { border: 1px solid #ffd700; }
+        th, td { padding: 8px; text-align: center; }
+        .login { margin: 20px 0; }
+        input { padding: 8px; width: 100%; margin: 5px 0; }
+    </style>
+</head>
+<body>
+<header>Sky Smoke Shop Loyalty</header>
+<div class="container" id="customer-view">
+    <h2 id="customer-name">أحمد 👋</h2>
+    <div class="points">رصيدك الحالي: <span id="customer-points">125</span> نقطة</div>
+    <button class="btn" onclick="redeemPoints()">استبدل النقاط</button>
+    <button class="btn" onclick="showOffers()">شاهد جميع العروض</button>
+    <h3>آخر العمليات:</h3>
+    <table>
+        <thead><tr><th>النقاط</th><th>التاريخ</th></tr></thead>
+        <tbody id="transaction-history">
+            <tr><td>+10</td><td>14 أغسطس 2025</td></tr>
+            <tr><td>+5</td><td>10 أغسطس 2025</td></tr>
+            <tr><td>+15</td><td>6 أغسطس 2025</td></tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="container" id="employee-view" style="display:none;">
+    <h2>لوحة التحكم للموظفين</h2>
+    <div class="login">
+        <input type="password" id="emp-password" placeholder="كلمة المرور">
+        <button class="btn" onclick="loginEmployee()">تسجيل دخول</button>
+    </div>
+    <div id="employee-panel" style="display:none;">
+        <input type="text" id="search-customer" placeholder="بحث عن الزبون بالاسم أو رقم الكرت">
+        <button class="btn" onclick="searchCustomer()">بحث</button>
+        <div id="employee-actions" style="margin-top:20px; display:none;">
+            <p>الاسم: <span id="emp-customer-name"></span></p>
+            <p>رصيد النقاط: <span id="emp-customer-points"></span></p>
+            <button class="btn" onclick="addPoints()">+ أضف نقاط</button>
+            <button class="btn" onclick="subtractPoints()">- خصم نقاط</button>
+        </div>
+    </div>
+</div>
+
+<script>
+let customers = {
+    'أحمد': { points: 125 },
+    'علي': { points: 60 },
+    'سارة': { points: 200 }
+};
+let currentCustomer = 'أحمد';
+
+function redeemPoints(){ alert('تم استبدال النقاط!'); }
+function showOffers(){ alert('هذه جميع العروض المتاحة للزبائن.'); }
+
+function loginEmployee(){
+    let pw = document.getElementById('emp-password').value;
+    if(pw === '1234'){
+        document.getElementById('employee-panel').style.display = 'block';
+        alert('تم تسجيل الدخول بنجاح');
+    } else { alert('كلمة المرور خاطئة'); }
+}
+
+function searchCustomer(){
+    let name = document.getElementById('search-customer').value;
+    if(customers[name]){
+        currentCustomer = name;
+        document.getElementById('emp-customer-name').innerText = name;
+        document.getElementById('emp-customer-points').innerText = customers[name].points;
+        document.getElementById('employee-actions').style.display = 'block';
+    } else { alert('الزبون غير موجود'); }
+}
+
+function addPoints(){
+    let amount = parseInt(prompt('كم عدد النقاط التي تريد إضافتها؟'));
+    if(!isNaN(amount)){ customers[currentCustomer].points += amount; document.getElementById('emp-customer-points').innerText = customers[currentCustomer].points; alert('تمت إضافة النقاط'); }
+}
+function subtractPoints(){
+    let amount = parseInt(prompt('كم عدد النقاط التي تريد خصمها؟'));
+    if(!isNaN(amount)){ customers[currentCustomer].points -= amount; if(customers[currentCustomer].points<0) customers[currentCustomer].points=0; document.getElementById('emp-customer-points').innerText = customers[currentCustomer].points; alert('تم خصم النقاط'); }
+}
+</script>
+</body>
+</html>
